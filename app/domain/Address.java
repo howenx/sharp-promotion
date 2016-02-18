@@ -15,6 +15,7 @@ public class Address implements Serializable {
     private String name;//姓名
     private String deliveryCity;//配送城市
     private String deliveryDetail;//配送详细地址
+    private String  idCardNum;//身份证号码
 
     @JsonIgnore
     private Long userId;//用户ID
@@ -22,19 +23,23 @@ public class Address implements Serializable {
     private String userToken;//客户端返回的token
     @JsonIgnore
     private Boolean orDefault;//是否默认收获地址
+    @JsonIgnore
+    private String provinceCode;//省份代码
 
     public Address() {
     }
 
-    public Address(Long addId, Long userId, String userToken, Boolean orDefault, String tel, String name, String deliveryCity, String deliveryDetail) {
+    public Address(Long addId, String tel, String name, String deliveryCity, String deliveryDetail, String idCardNum, Long userId, String userToken, Boolean orDefault, String provinceCode) {
         this.addId = addId;
-        this.userId = userId;
-        this.userToken = userToken;
-        this.orDefault = orDefault;
         this.tel = tel;
         this.name = name;
         this.deliveryCity = deliveryCity;
         this.deliveryDetail = deliveryDetail;
+        this.idCardNum = idCardNum;
+        this.userId = userId;
+        this.userToken = userToken;
+        this.orDefault = orDefault;
+        this.provinceCode = provinceCode;
     }
 
     public Long getAddId() {
@@ -43,30 +48,6 @@ public class Address implements Serializable {
 
     public void setAddId(Long addId) {
         this.addId = addId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserToken() {
-        return userToken;
-    }
-
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
-    }
-
-    public Boolean getOrDefault() {
-        return orDefault;
-    }
-
-    public void setOrDefault(Boolean orDefault) {
-        this.orDefault = orDefault;
     }
 
     public String getTel() {
@@ -101,17 +82,59 @@ public class Address implements Serializable {
         this.deliveryDetail = deliveryDetail;
     }
 
+    public String getIdCardNum() {
+        return idCardNum;
+    }
+
+    public void setIdCardNum(String idCardNum) {
+        this.idCardNum = idCardNum;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    public Boolean getOrDefault() {
+        return orDefault;
+    }
+
+    public void setOrDefault(Boolean orDefault) {
+        this.orDefault = orDefault;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
                 "addId=" + addId +
-                ", userId=" + userId +
-                ", userToken='" + userToken + '\'' +
-                ", orDefault=" + orDefault +
                 ", tel='" + tel + '\'' +
                 ", name='" + name + '\'' +
                 ", deliveryCity='" + deliveryCity + '\'' +
                 ", deliveryDetail='" + deliveryDetail + '\'' +
+                ", idCardNum='" + idCardNum + '\'' +
+                ", userId=" + userId +
+                ", userToken='" + userToken + '\'' +
+                ", orDefault=" + orDefault +
+                ", provinceCode='" + provinceCode + '\'' +
                 '}';
     }
 }

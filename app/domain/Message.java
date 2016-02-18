@@ -73,9 +73,10 @@ public class Message implements Serializable{
         SKU_INVALID("亲,您已经长时间未操作,此商品已经失效,建议您刷新购物车", 2002),
 
 
+
         PURCHASE_QUANTITY_LIMIT("亲,您购买数量超过我们的限制了", 3001),
         PURCHASE_QUANTITY_SUM_PRICE("海关规定单次报关物品价值不能超过1000元", 3002),
-
+        
 
         PASSWORD_ERROR_TOO_MANY("密码错误次数过多", 4001),
 
@@ -101,7 +102,9 @@ public class Message implements Serializable{
 
         SECURITY_ERROR ("安全校验不通过", 5004),
 
-        SEND_SMS_TOO_MANY ("发送验证码次数过多,请明天再试", 5005);
+        SEND_SMS_TOO_MANY ("发送验证码次数过多,请明天再试", 5005),
+
+        FILE_TYPE_NOT_SUPPORTED("文件类型不支持",6001);
 
         // 成员变量
         private String name;

@@ -2,8 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index()
+#拼购
+GET           /promotion/pin/activity/$pinActivity<[0-9]+>                                                      controllers.PinCtrl.pinActivity(pinActivity:Long,pay: Integer ?= 1,userPayType: Integer ?=0)
+GET           /promotion/pin/activity/pay/$pinActivity<[0-9]+>/$userPayType<[0-9]+>                             controllers.PinCtrl.pinActivity(pinActivity:Long,pay: Integer ?= 2,userPayType: Integer)
+GET           /promotion/pin/activity/list                                                                      controllers.PinCtrl.activityList()
+
+GET           /promotion/test/pin                                                          controllers.PinCtrl.testpin()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
