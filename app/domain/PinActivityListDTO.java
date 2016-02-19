@@ -42,6 +42,9 @@ public class PinActivityListDTO implements Serializable {
     private String          pinSkuUrl;   //拼购商品链接
     private String          pinTitle;    //拼购商品标题
 
+    private Integer          orMaster;       //订单支付成功后需要的用户类型,团长: 1,团员:0
+
+
     @JsonIgnore
     private List<PinUser>   pinUsers;       //参与拼购活动的用于
 
@@ -49,7 +52,7 @@ public class PinActivityListDTO implements Serializable {
     public PinActivityListDTO() {
     }
 
-    public PinActivityListDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, List<PinUser> pinUsers, String pinImg, String pinSkuUrl, String pinTitle) {
+    public PinActivityListDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, String pinImg, String pinSkuUrl, String pinTitle, Integer orMaster, List<PinUser> pinUsers) {
         this.pinActiveId = pinActiveId;
         this.pinUrl = pinUrl;
         this.pinId = pinId;
@@ -62,10 +65,11 @@ public class PinActivityListDTO implements Serializable {
         this.endAt = endAt;
         this.pay = pay;
         this.endCountDown = endCountDown;
-        this.pinUsers = pinUsers;
         this.pinImg = pinImg;
         this.pinSkuUrl = pinSkuUrl;
         this.pinTitle = pinTitle;
+        this.orMaster = orMaster;
+        this.pinUsers = pinUsers;
     }
 
     public Long getPinActiveId() {
@@ -164,14 +168,6 @@ public class PinActivityListDTO implements Serializable {
         this.endCountDown = endCountDown;
     }
 
-    public List<PinUser> getPinUsers() {
-        return pinUsers;
-    }
-
-    public void setPinUsers(List<PinUser> pinUsers) {
-        this.pinUsers = pinUsers;
-    }
-
     public String getPinImg() {
         return pinImg;
     }
@@ -196,9 +192,25 @@ public class PinActivityListDTO implements Serializable {
         this.pinTitle = pinTitle;
     }
 
+    public Integer getOrMaster() {
+        return orMaster;
+    }
+
+    public void setOrMaster(Integer orMaster) {
+        this.orMaster = orMaster;
+    }
+
+    public List<PinUser> getPinUsers() {
+        return pinUsers;
+    }
+
+    public void setPinUsers(List<PinUser> pinUsers) {
+        this.pinUsers = pinUsers;
+    }
+
     @Override
     public String toString() {
-        return "PinActivityDTO{" +
+        return "PinActivityListDTO{" +
                 "pinActiveId=" + pinActiveId +
                 ", pinUrl='" + pinUrl + '\'' +
                 ", pinId=" + pinId +
@@ -211,10 +223,11 @@ public class PinActivityListDTO implements Serializable {
                 ", endAt=" + endAt +
                 ", pay='" + pay + '\'' +
                 ", endCountDown=" + endCountDown +
-                ", pinUsers=" + pinUsers +
                 ", pinImg='" + pinImg + '\'' +
                 ", pinSkuUrl='" + pinSkuUrl + '\'' +
                 ", pinTitle='" + pinTitle + '\'' +
+                ", orMaster=" + orMaster +
+                ", pinUsers=" + pinUsers +
                 '}';
     }
 }

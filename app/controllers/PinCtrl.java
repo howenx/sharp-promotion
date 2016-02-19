@@ -40,6 +40,9 @@ public class PinCtrl extends Controller {
 
     private PromotionService promotionService;
 
+    //行邮税收税标准
+    public static String POSTAL_STANDARD;
+
     public static final String PIN_USER_PHOTO = Play.application().configuration().getString("oss.url");
 
     //图片服务器url
@@ -72,6 +75,8 @@ public class PinCtrl extends Controller {
         this.idService = idService;
         this.skuService = skuService;
         this.promotionService = promotionService;
+        //行邮税收税标准
+        POSTAL_STANDARD = skuService.getSysParameter(new SysParameter(null, null, null, "POSTAL_STANDARD")).getParameterVal();
 
     }
 
@@ -111,7 +116,7 @@ public class PinCtrl extends Controller {
                 try {
                     ID userNm = idService.getID(p.getUserId());
                     if (userNm == null)
-                        p.setUserNm(("HMM-" + GenCouponCode.GetCode(4)).toLowerCase());
+                        p.setUserNm(("HMM-RB" + GenCouponCode.GetCode(4)).toLowerCase());
                     else p.setUserNm(idService.getID(p.getUserId()).getNickname());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -166,6 +171,17 @@ public class PinCtrl extends Controller {
                 }else pinActivityDTO.setOrJoinActivity(0);
             }else pinActivityDTO.setOrJoinActivity(0);
 
+            //库存信息
+            pinActivityDTO.setInvArea(sku.getInvArea());
+            pinActivityDTO.setInvAreaNm(sku.getInvAreaNm());
+            pinActivityDTO.setInvCustoms(sku.getInvCustoms());
+            pinActivityDTO.setPostalTaxRate(sku.getPostalTaxRate());
+            pinActivityDTO.setPostalStandard(POSTAL_STANDARD);
+            pinActivityDTO.setSkuId(sku.getId());
+            pinActivityDTO.setSkuType("pin");
+            pinActivityDTO.setSkuTypeId(pinSku.getPinId());
+            pinActivityDTO.setPinTieredPriceId(pinActivity.getPinTieredId());
+
             result.putPOJO("activity", Json.toJson(pinActivityDTO));
             result.putPOJO("message", Json.toJson(new Message(Message.ErrorCode.getName(Message.ErrorCode.SUCCESS.getIndex()), Message.ErrorCode.SUCCESS.getIndex())));
             return ok(result);
@@ -210,6 +226,10 @@ public class PinCtrl extends Controller {
                 pinActivityDTO.setPinSkuUrl(DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + sku.getId() + "/" + pinSku.getPinId());
 
                 pinActivityDTO.setPinTitle(pinSku.getPinTitle());
+
+                if (pin.isOrMaster())
+                pinActivityDTO.setOrMaster(1);
+                else pinActivityDTO.setOrMaster(0);
 
                 JsonNode js_invImg = Json.parse(pinSku.getPinImg());
                 if (js_invImg.has("url")) {
