@@ -57,4 +57,14 @@ public class PromotionServiceImpl implements PromotionService {
     public List<PinUser> selectPinUser(PinUser pinUser) {
         return pinSkuMapper.selectPinUser(pinUser);
     }
+
+    @Override
+    public List<PinSku> getPinSkus(PinSku pinSku) {
+        return pinSkuMapper.getPinSkus(pinSku);
+    }
+
+    @Override
+    public List<PinSku> getPinSkuStatus(PinSku pinSku) {
+        return pinSkuMapper.getPinSkuStatus(pinSku);
+    }
 }

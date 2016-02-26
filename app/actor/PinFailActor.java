@@ -46,6 +46,7 @@ public class PinFailActor extends AbstractActor {
                     order.setUserId(p.getUserId());
                     List<Order> orders = cartService.getPinOrder(order);
                     if (orders.size() > 0) {
+                        order = orders.get(0);
                         Refund refund = new Refund();
                         refund.setAmount(order.getOrderAmount());
                         refund.setOrderId(order.getOrderId());
@@ -83,6 +84,10 @@ public class PinFailActor extends AbstractActor {
                                 }
                                 return  wsResponse.asJson();
                             });
+
+                            //更改订单状态
+                            order.setOrderStatus("T");//退款状态
+                            cartService.updateOrder(order);
                         }
                     }
                 }

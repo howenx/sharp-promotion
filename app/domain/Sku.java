@@ -58,10 +58,20 @@ public class Sku {
     @JsonIgnore
     private     String              carriageModelCode;
 
+    private     String              shareUrl;//分享链接
+    private     Integer             collectCount;//收藏数
+    private     Integer             browseCount;//浏览次数
+
+    private     String              skuType;//商品类型 1.vary,2.item,3.customize,4.pin
+
+    private     Long                skuTypeId;//商品类型所对应的ID
+
+
+
     public Sku() {
     }
 
-    public Sku(Long id, String itemColor, String itemSize, BigDecimal itemSrcPrice, BigDecimal itemPrice, BigDecimal itemDiscount, Boolean orMasterInv, String state, String invArea, Integer restrictAmount, Integer restAmount, String invImg, String itemPreviewImgs, String invUrl, String invTitle, String invCustoms, String postalTaxRate, String postalStandard, String postalLimit, String invAreaNm, Long itemId, Integer amount, BigDecimal itemCostPrice, Integer soldAmount, Boolean orDestroy, Timestamp destroyAt, Timestamp updateAt, Timestamp createAt, String carriageModelCode) {
+    public Sku(Long id, String itemColor, String itemSize, BigDecimal itemSrcPrice, BigDecimal itemPrice, BigDecimal itemDiscount, Boolean orMasterInv, String state, String invArea, Integer restrictAmount, Integer restAmount, String invImg, String itemPreviewImgs, String invUrl, String invTitle, String invCustoms, String postalTaxRate, String postalStandard, String postalLimit, String invAreaNm, Long itemId, Integer amount, BigDecimal itemCostPrice, Integer soldAmount, Boolean orDestroy, Timestamp destroyAt, Timestamp updateAt, Timestamp createAt, String carriageModelCode, String shareUrl, Integer collectCount, Integer browseCount, String skuType, Long skuTypeId) {
         this.id = id;
         this.itemColor = itemColor;
         this.itemSize = itemSize;
@@ -91,6 +101,11 @@ public class Sku {
         this.updateAt = updateAt;
         this.createAt = createAt;
         this.carriageModelCode = carriageModelCode;
+        this.shareUrl = shareUrl;
+        this.collectCount = collectCount;
+        this.browseCount = browseCount;
+        this.skuType = skuType;
+        this.skuTypeId = skuTypeId;
     }
 
     public Long getId() {
@@ -325,6 +340,46 @@ public class Sku {
         this.carriageModelCode = carriageModelCode;
     }
 
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
+    public Integer getCollectCount() {
+        return collectCount;
+    }
+
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
+    }
+
+    public Integer getBrowseCount() {
+        return browseCount;
+    }
+
+    public void setBrowseCount(Integer browseCount) {
+        this.browseCount = browseCount;
+    }
+
+    public String getSkuType() {
+        return skuType;
+    }
+
+    public void setSkuType(String skuType) {
+        this.skuType = skuType;
+    }
+
+    public Long getSkuTypeId() {
+        return skuTypeId;
+    }
+
+    public void setSkuTypeId(Long skuTypeId) {
+        this.skuTypeId = skuTypeId;
+    }
+
     @Override
     public String toString() {
         return "Sku{" +
@@ -357,6 +412,11 @@ public class Sku {
                 ", updateAt=" + updateAt +
                 ", createAt=" + createAt +
                 ", carriageModelCode='" + carriageModelCode + '\'' +
+                ", shareUrl='" + shareUrl + '\'' +
+                ", collectCount=" + collectCount +
+                ", browseCount=" + browseCount +
+                ", skuType='" + skuType + '\'' +
+                ", skuTypeId=" + skuTypeId +
                 '}';
     }
 }

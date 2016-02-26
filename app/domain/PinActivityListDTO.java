@@ -44,6 +44,8 @@ public class PinActivityListDTO implements Serializable {
 
     private Integer          orMaster;       //订单支付成功后需要的用户类型,团长: 1,团员:0
 
+    private Long            orderId;//订单ID
+
 
     @JsonIgnore
     private List<PinUser>   pinUsers;       //参与拼购活动的用于
@@ -52,7 +54,7 @@ public class PinActivityListDTO implements Serializable {
     public PinActivityListDTO() {
     }
 
-    public PinActivityListDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, String pinImg, String pinSkuUrl, String pinTitle, Integer orMaster, List<PinUser> pinUsers) {
+    public PinActivityListDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, String pinImg, String pinSkuUrl, String pinTitle, Integer orMaster, Long orderId, List<PinUser> pinUsers) {
         this.pinActiveId = pinActiveId;
         this.pinUrl = pinUrl;
         this.pinId = pinId;
@@ -69,6 +71,7 @@ public class PinActivityListDTO implements Serializable {
         this.pinSkuUrl = pinSkuUrl;
         this.pinTitle = pinTitle;
         this.orMaster = orMaster;
+        this.orderId = orderId;
         this.pinUsers = pinUsers;
     }
 
@@ -200,6 +203,14 @@ public class PinActivityListDTO implements Serializable {
         this.orMaster = orMaster;
     }
 
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
     public List<PinUser> getPinUsers() {
         return pinUsers;
     }
@@ -227,6 +238,7 @@ public class PinActivityListDTO implements Serializable {
                 ", pinSkuUrl='" + pinSkuUrl + '\'' +
                 ", pinTitle='" + pinTitle + '\'' +
                 ", orMaster=" + orMaster +
+                ", orderId=" + orderId +
                 ", pinUsers=" + pinUsers +
                 '}';
     }

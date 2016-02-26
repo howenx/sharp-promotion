@@ -7,13 +7,16 @@
         ${alias}.pin_id,
         ${alias}.pin_img,
         ${alias}.share_url,
-        ${alias}.status,
+        case
+        when ${alias}.start_at &gt;CURRENT_TIMESTAMP(0) then 'P'
+        when ${alias}.end_at  &lt;CURRENT_TIMESTAMP(0) then 'D'
+        else ${alias}.status
+        end as status,
         ${alias}.create_at,
         ${alias}.update_at,
         ${alias}.pin_title,
         ${alias}.start_at,
         ${alias}.end_at,
-        <!--${alias}.pin_price_rule,-->
         ${alias}.restrict_amount,
         ${alias}.floor_price,
         ${alias}.inv_id,
@@ -26,6 +29,29 @@
             <property name="alias" value="t"/>
         </include>
         from pin_sku t where pin_id = ${value}
+    </select>
+
+    <select id="getPinSkus" resultType="domain.PinSku" parameterType="domain.PinSku">
+        select
+        <include refid="pinSkuColumns">
+            <property name="alias" value="t"/>
+        </include>
+        from pin_sku t where 1=1
+        <if test="pinId!=null and pinId!=''">
+            and  pin_id = ${pinId}
+        </if>
+    </select>
+
+    <select id="getPinSkuStatus" resultType="domain.PinSku" parameterType="domain.PinSku">
+        select
+        <include refid="pinSkuColumns">
+            <property name="alias" value="t"/>
+        </include>
+        from pin_sku t where 1=1
+        <if test="pinId!=null and pinId!=''">
+            and  pin_id = ${pinId}
+        </if>
+        and status = 'Y'
     </select>
 
     <sql id="tieredPriceColumns">

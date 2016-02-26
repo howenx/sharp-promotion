@@ -45,6 +45,9 @@ public class PinActivityDTO implements Serializable {
 
     private Integer         orJoinActivity; //是否参团,0:未参团,1:参团
 
+    @JsonIgnore
+    private Integer         orRestrictAmount;//是否超出限购数量,0:可以继续下单,1:当前已经成功购买数量等于限购数量
+
     //inv
     private     String              invArea;            //库存区域区分：'B'保税区仓库发货，‘Z’韩国直邮
     private     String              invCustoms;         //报关单位
@@ -63,7 +66,7 @@ public class PinActivityDTO implements Serializable {
     public PinActivityDTO() {
     }
 
-    public PinActivityDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, String pinImg, String pinSkuUrl, String pinTitle, String userType, Integer orJoinActivity, String invArea, String invCustoms, String invAreaNm, String postalTaxRate, String postalStandard, Long skuId, String skuType, Long skuTypeId, Long pinTieredPriceId, List<PinUser> pinUsers) {
+    public PinActivityDTO(Long pinActiveId, String pinUrl, Long pinId, Long masterUserId, Integer personNum, BigDecimal pinPrice, Integer joinPersons, Timestamp createAt, String status, Timestamp endAt, String pay, Long endCountDown, String pinImg, String pinSkuUrl, String pinTitle, String userType, Integer orJoinActivity, Integer orRestrictAmount, String invArea, String invCustoms, String invAreaNm, String postalTaxRate, String postalStandard, Long skuId, String skuType, Long skuTypeId, Long pinTieredPriceId, List<PinUser> pinUsers) {
         this.pinActiveId = pinActiveId;
         this.pinUrl = pinUrl;
         this.pinId = pinId;
@@ -81,6 +84,7 @@ public class PinActivityDTO implements Serializable {
         this.pinTitle = pinTitle;
         this.userType = userType;
         this.orJoinActivity = orJoinActivity;
+        this.orRestrictAmount = orRestrictAmount;
         this.invArea = invArea;
         this.invCustoms = invCustoms;
         this.invAreaNm = invAreaNm;
@@ -229,6 +233,14 @@ public class PinActivityDTO implements Serializable {
         this.orJoinActivity = orJoinActivity;
     }
 
+    public Integer getOrRestrictAmount() {
+        return orRestrictAmount;
+    }
+
+    public void setOrRestrictAmount(Integer orRestrictAmount) {
+        this.orRestrictAmount = orRestrictAmount;
+    }
+
     public String getInvArea() {
         return invArea;
     }
@@ -309,5 +321,37 @@ public class PinActivityDTO implements Serializable {
         this.pinUsers = pinUsers;
     }
 
-
+    @Override
+    public String toString() {
+        return "PinActivityDTO{" +
+                "pinActiveId=" + pinActiveId +
+                ", pinUrl='" + pinUrl + '\'' +
+                ", pinId=" + pinId +
+                ", masterUserId=" + masterUserId +
+                ", personNum=" + personNum +
+                ", pinPrice=" + pinPrice +
+                ", joinPersons=" + joinPersons +
+                ", createAt=" + createAt +
+                ", status='" + status + '\'' +
+                ", endAt=" + endAt +
+                ", pay='" + pay + '\'' +
+                ", endCountDown=" + endCountDown +
+                ", pinImg='" + pinImg + '\'' +
+                ", pinSkuUrl='" + pinSkuUrl + '\'' +
+                ", pinTitle='" + pinTitle + '\'' +
+                ", userType='" + userType + '\'' +
+                ", orJoinActivity=" + orJoinActivity +
+                ", orRestrictAmount=" + orRestrictAmount +
+                ", invArea='" + invArea + '\'' +
+                ", invCustoms='" + invCustoms + '\'' +
+                ", invAreaNm='" + invAreaNm + '\'' +
+                ", postalTaxRate='" + postalTaxRate + '\'' +
+                ", postalStandard='" + postalStandard + '\'' +
+                ", skuId=" + skuId +
+                ", skuType='" + skuType + '\'' +
+                ", skuTypeId=" + skuTypeId +
+                ", pinTieredPriceId=" + pinTieredPriceId +
+                ", pinUsers=" + pinUsers +
+                '}';
+    }
 }

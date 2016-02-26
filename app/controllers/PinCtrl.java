@@ -7,6 +7,7 @@ import domain.*;
 import filters.UserAuth;
 import net.spy.memcached.MemcachedClient;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.ArrayStack;
 import play.Logger;
 import play.Play;
 import play.libs.Json;
@@ -21,6 +22,7 @@ import util.CalCountDown;
 import util.GenCouponCode;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -167,9 +169,49 @@ public class PinCtrl extends Controller {
                     List<PinUser> pinUsers = promotionService.selectPinUser(pu);
                     if (pinUsers.size()>0){
                         pinActivityDTO.setOrJoinActivity(1);
-                    }else pinActivityDTO.setOrJoinActivity(0);
-                }else pinActivityDTO.setOrJoinActivity(0);
-            }else pinActivityDTO.setOrJoinActivity(0);
+                    }else {//此用户没有加入活动,则需要先判断此活动的状态,如果活动为C或者F状态,那么就需要返回E状态,告知用户此拼购已经结束了,并返回orderLine表中的
+
+                        if (pinActivity.getStatus().equals("C")||pinActivity.getStatus().equals("F")) {
+                            pinActivityDTO.setStatus("E");
+                            result.putPOJO("themeList", Json.toJson(getPushPin()));
+                        }
+                        pinActivityDTO.setOrJoinActivity(0);
+                    }
+
+                    Integer userPin = 0;
+
+                    //用户存在,需要验证用户是否符合限购策略
+                    Order order = new Order();
+                    order.setOrderType(2);//拼购订单
+                    order.setUserId(userId);
+                    List<Order> orders  = cartService.getPinUserOrder(order);
+                    if (orders.size()>0){
+                        for (Order os:orders){
+                            OrderLine orderLine = new OrderLine();
+                            orderLine.setOrderId(os.getOrderId());
+                            orderLine.setSkuType("pin");
+                            orderLine.setSkuTypeId(pinSku.getPinId());
+                            List<OrderLine> lines = cartService.selectOrderLine(orderLine);
+                            userPin += lines.size();
+                        }
+                        if (userPin==pinSku.getRestrictAmount()){
+                            pinActivityDTO.setOrRestrictAmount(1);
+                        }else pinActivityDTO.setOrRestrictAmount(0);
+                    }
+                }else {
+                    if (pinActivity.getStatus().equals("C")||pinActivity.getStatus().equals("F")) {
+                        pinActivityDTO.setStatus("E");
+                        result.putPOJO("themeList", Json.toJson(getPushPin()));
+                    }
+                    pinActivityDTO.setOrJoinActivity(0);
+                }
+            }else {
+                if (pinActivity.getStatus().equals("C")||pinActivity.getStatus().equals("F")) {
+                    pinActivityDTO.setStatus("E");
+                    result.putPOJO("themeList", Json.toJson(getPushPin()));
+                }
+                pinActivityDTO.setOrJoinActivity(0);
+            }
 
             //库存信息
             pinActivityDTO.setInvArea(sku.getInvArea());
@@ -193,6 +235,10 @@ public class PinCtrl extends Controller {
         }
     }
 
+    /**
+     * 拼购活动列表
+     * @return result
+     */
     @Security.Authenticated(UserAuth.class)
     public Result activityList() {
 
@@ -211,6 +257,18 @@ public class PinCtrl extends Controller {
 
                 PinActivityListDTO pinActivityDTO = new PinActivityListDTO();
                 PinActivity pinActivity = promotionService.selectPinActivityById(pin.getPinActiveId());
+
+                if (pinActivity.getStatus().equals("C")) {
+
+                    Order order =new Order();
+                    pin.setUserId(userId);
+                    pin.setPinActiveId(pin.getPinActiveId());
+                    List<Order> orders  =cartService.getPinUserOrder(order);
+                    if (orders.size()>0) {
+                        order = orders.get(0);
+                        pinActivityDTO.setOrderId(order.getOrderId());
+                    }
+                }
 
                 BeanUtils.copyProperties(pinActivityDTO, pinActivity);
 
@@ -251,6 +309,46 @@ public class PinCtrl extends Controller {
             result.putPOJO("message", Json.toJson(new Message(Message.ErrorCode.getName(Message.ErrorCode.ERROR.getIndex()), Message.ErrorCode.ERROR.getIndex())));
             return ok(result);
         }
+    }
+
+    /**
+     * 获取推荐拼购商品
+     * @return list
+     * @throws Exception
+     */
+    private List<ThemeItem> getPushPin() throws Exception {
+            List<ThemeItem> themeItems = new ArrayList<>();
+
+            List<PinSku> pinSkus = promotionService.getPinSkuStatus(new PinSku());
+
+            for (int i = 0; i < (pinSkus.size() > 3 ? 3 : pinSkus.size()); i++) {
+
+                ThemeItem themeItem  =new ThemeItem();
+                PinSku pin = pinSkus.get(i);
+
+                Sku inv = new Sku();
+                inv.setId(pin.getInvId());
+                inv = skuService.getInv(inv);
+
+                themeItem.setCollectCount(inv.getCollectCount());
+                themeItem.setItemDiscount(pin.getPinDiscount());
+                JsonNode jsonNodeInvImg = Json.parse(pin.getPinImg());
+                if (jsonNodeInvImg.has("url")) {
+                    ((ObjectNode) jsonNodeInvImg).put("url", IMAGE_URL + jsonNodeInvImg.get("url").asText());
+                    themeItem.setItemImg(Json.stringify(jsonNodeInvImg));
+                }
+                themeItem.setItemPrice(Json.parse(pin.getFloorPrice()).get("price").decimalValue());
+                themeItem.setItemSoldAmount(inv.getSoldAmount());
+                themeItem.setItemSrcPrice(inv.getItemSrcPrice());
+                themeItem.setItemTitle(inv.getInvTitle());
+                themeItem.setItemUrl(DEPLOY_URL + "/comm/pin/detail/" + inv.getItemId() + "/" + inv.getId() + "/" + pin.getPinId());
+                themeItem.setItemType("pin");
+                themeItem.setState(pin.getStatus());//商品状态
+                themeItem.setStartAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(pin.getStartAt()));
+                themeItem.setEndAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(pin.getEndAt()));
+                themeItems.add(themeItem);
+            }
+            return themeItems;
     }
 
 }
