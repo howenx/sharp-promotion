@@ -1,6 +1,5 @@
 package modules;
 
-import actor.PinFailActor;
 import com.google.inject.AbstractModule;
 import play.libs.akka.AkkaGuiceSupport;
 
@@ -11,6 +10,6 @@ import play.libs.akka.AkkaGuiceSupport;
 public class ActorModule extends AbstractModule implements AkkaGuiceSupport {
     @Override
     protected void configure() {
-        bindActor(PinFailActor.class, "pinFailActor");
+
     }
 }
