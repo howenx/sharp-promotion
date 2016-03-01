@@ -8,5 +8,7 @@ GET        /promotion/pin/activity/pay/$pinActivity<[0-9]+>/$userPayType<[0-9]+>
 GET        /promotion/pin/activity/list                                                 controllers.PinCtrl.activityList()
 
 
+
+
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                                                                controllers.Assets.versioned(path="/public", file: Asset)
