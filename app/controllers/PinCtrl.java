@@ -225,8 +225,8 @@ public class PinCtrl extends Controller {
                 if (pinActivity.getStatus().equals("C")) {
 
                     Order order = new Order();
-                    pin.setUserId(userId);
-                    pin.setPinActiveId(pin.getPinActiveId());
+                    order.setUserId(userId);
+                    order.setPinActiveId(pin.getPinActiveId());
                     List<Order> orders = cartService.getPinUserOrder(order);
                     if (orders.size() > 0) {
                         order = orders.get(0);
