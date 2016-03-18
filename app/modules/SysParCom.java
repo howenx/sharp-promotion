@@ -45,6 +45,8 @@ public class SysParCom {
 
     public static String IMAGE_URL;
 
+    public static String ACTOR_PIN_FAIL;
+
 
     @Inject
     public SysParCom(SkuService skuService, Configuration configuration) {
@@ -70,6 +72,8 @@ public class SysParCom {
         ID_URL = configuration.getString("id.server.url");
 
         IMAGE_URL = configuration.getString("image.server.url");
+
+        ACTOR_PIN_FAIL =  configuration.getString("actor.pin.fail");
 
     }
 

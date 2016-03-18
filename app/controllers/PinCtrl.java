@@ -1,11 +1,13 @@
 package controllers;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import domain.*;
 import filters.UserAuth;
-import modules.SysParCom;
+
 import net.spy.memcached.MemcachedClient;
 import org.apache.commons.beanutils.BeanUtils;
 import play.Logger;
@@ -21,11 +23,13 @@ import util.CalCountDown;
 import util.GenCouponCode;
 
 import javax.inject.Inject;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static play.libs.Json.newObject;
+import static modules.SysParCom.*;
 
 /**
  * 拼购
@@ -45,6 +49,9 @@ public class PinCtrl extends Controller {
     @Inject
     private PromotionService promotionService;
 
+
+    @Inject
+    private ActorSystem system;
 
     //将Json串转换成List
     private static ObjectMapper mapper = new ObjectMapper();
@@ -78,7 +85,7 @@ public class PinCtrl extends Controller {
             List<PinUser> pinUserList = promotionService.selectPinUser(pinUser);
 
             pinUserList = pinUserList.stream().map(p -> {
-                p.setUserImg(SysParCom.IMAGE_URL+ p.getUserImg());
+                p.setUserImg(IMAGE_URL+ p.getUserImg());
                 try {
                     ID userNm = idService.getID(p.getUserId());
                     if (userNm == null)
@@ -98,7 +105,7 @@ public class PinCtrl extends Controller {
                 else pinActivityDTO.setUserType("ordinary");
             } else pinActivityDTO.setPay("normal");
 
-            pinActivityDTO.setPinUrl(SysParCom.PROMOTION_URL + "/promotion/pin/activity/" + activityId);
+            pinActivityDTO.setPinUrl(PROMOTION_URL + "/promotion/pin/activity/" + activityId);
 
             pinActivityDTO.setEndCountDown(CalCountDown.getEndTimeSubtract(pinActivityDTO.getEndAt()));
 
@@ -108,14 +115,14 @@ public class PinCtrl extends Controller {
             Sku sku = new Sku();
             sku.setId(pinSku.getInvId());
             sku = skuService.getInv(sku);
-            pinActivityDTO.setPinSkuUrl(SysParCom.DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + sku.getId() + "/" + pinSku.getPinId());
+            pinActivityDTO.setPinSkuUrl(DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + sku.getId() + "/" + pinSku.getPinId());
 
             pinActivityDTO.setPinTitle(pinSku.getPinTitle());
 
 
             JsonNode js_invImg = Json.parse(pinSku.getPinImg());
             if (js_invImg.has("url")) {
-                ((ObjectNode) js_invImg).put("url", SysParCom.IMAGE_URL + js_invImg.get("url").asText());
+                ((ObjectNode) js_invImg).put("url",IMAGE_URL + js_invImg.get("url").asText());
             }
             pinActivityDTO.setPinImg(js_invImg.toString());
 
@@ -181,7 +188,7 @@ public class PinCtrl extends Controller {
             pinActivityDTO.setInvAreaNm(sku.getInvAreaNm());
             pinActivityDTO.setInvCustoms(sku.getInvCustoms());
             pinActivityDTO.setPostalTaxRate(sku.getPostalTaxRate());
-            pinActivityDTO.setPostalStandard(SysParCom.POSTAL_STANDARD);
+            pinActivityDTO.setPostalStandard(POSTAL_STANDARD);
             pinActivityDTO.setSkuId(sku.getId());
             pinActivityDTO.setSkuType("pin");
             pinActivityDTO.setSkuTypeId(pinSku.getPinId());
@@ -222,6 +229,11 @@ public class PinCtrl extends Controller {
                 PinActivityListDTO pinActivityDTO = new PinActivityListDTO();
                 PinActivity pinActivity = promotionService.selectPinActivityById(pin.getPinActiveId());
 
+                if (pinActivity.getEndAt().before(new Timestamp(new Date().getTime())) && pinActivity.getStatus().equals("Y") && pinActivity.getJoinPersons()<pinActivity.getPersonNum()){
+                    pinActivity.setStatus("F");
+                    system.actorSelection(ACTOR_PIN_FAIL).tell(pinActivity.getPinActiveId(), ActorRef.noSender());
+                }
+
                 if (pinActivity.getStatus().equals("C")) {
 
                     Order order = new Order();
@@ -236,7 +248,7 @@ public class PinCtrl extends Controller {
 
                 BeanUtils.copyProperties(pinActivityDTO, pinActivity);
 
-                pinActivityDTO.setPinUrl(SysParCom.PROMOTION_URL + "/promotion/pin/activity/" + pinActivity.getPinActiveId());
+                pinActivityDTO.setPinUrl(PROMOTION_URL + "/promotion/pin/activity/" + pinActivity.getPinActiveId());
 
                 pinActivityDTO.setEndCountDown(CalCountDown.getEndTimeSubtract(pinActivityDTO.getEndAt()));
 
@@ -245,7 +257,7 @@ public class PinCtrl extends Controller {
                 Sku sku = new Sku();
                 sku.setId(pinSku.getInvId());
                 sku = skuService.getInv(sku);
-                pinActivityDTO.setPinSkuUrl(SysParCom.DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + sku.getId() + "/" + pinSku.getPinId());
+                pinActivityDTO.setPinSkuUrl(DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + pinSku.getPinId());
 
                 pinActivityDTO.setPinTitle(pinSku.getPinTitle());
 
@@ -255,7 +267,7 @@ public class PinCtrl extends Controller {
 
                 JsonNode js_invImg = Json.parse(pinSku.getPinImg());
                 if (js_invImg.has("url")) {
-                    ((ObjectNode) js_invImg).put("url", SysParCom.IMAGE_URL + js_invImg.get("url").asText());
+                    ((ObjectNode) js_invImg).put("url", IMAGE_URL + js_invImg.get("url").asText());
                 }
                 pinActivityDTO.setPinImg(js_invImg.toString());
 
@@ -299,14 +311,14 @@ public class PinCtrl extends Controller {
             themeItem.setItemDiscount(pin.getPinDiscount());
             JsonNode jsonNodeInvImg = Json.parse(pin.getPinImg());
             if (jsonNodeInvImg.has("url")) {
-                ((ObjectNode) jsonNodeInvImg).put("url", SysParCom.IMAGE_URL + jsonNodeInvImg.get("url").asText());
+                ((ObjectNode) jsonNodeInvImg).put("url", IMAGE_URL + jsonNodeInvImg.get("url").asText());
                 themeItem.setItemImg(Json.stringify(jsonNodeInvImg));
             }
             themeItem.setItemPrice(Json.parse(pin.getFloorPrice()).get("price").decimalValue());
             themeItem.setItemSoldAmount(inv.getSoldAmount());
             themeItem.setItemSrcPrice(inv.getItemSrcPrice());
             themeItem.setItemTitle(inv.getInvTitle());
-            themeItem.setItemUrl(SysParCom.DEPLOY_URL + "/comm/pin/detail/" + inv.getItemId() + "/" + inv.getId() + "/" + pin.getPinId());
+            themeItem.setItemUrl(DEPLOY_URL + "/comm/pin/detail/" + inv.getItemId() + "/" + inv.getId() + "/" + pin.getPinId());
             themeItem.setItemType("pin");
             themeItem.setState(pin.getStatus());//商品状态
             themeItem.setStartAt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(pin.getStartAt()));
