@@ -116,8 +116,7 @@ public class PinCtrl extends Controller {
                 Sku sku = new Sku();
                 sku.setId(pinSku.getInvId());
                 sku = skuService.getInv(sku);
-                pinActivityDTO.setPinSkuUrl(DEPLOY_URL + "/comm/pin/detail/" + sku.getItemId() + "/" + sku.getId() + "/" + pinSku.getPinId());
-
+                pinActivityDTO.setPinSkuUrl(DEPLOY_URL + "/comm/detail/pin/" + sku.getItemId() + "/" + pinSku.getPinId());
                 pinActivityDTO.setPinTitle(pinSku.getPinTitle());
 
 
