@@ -129,9 +129,9 @@ public class PinCtrl extends Controller {
 
                 //用户状态
                 if (header.isPresent()) {
-                    Optional<String> token = Optional.ofNullable(cache.get(header.get()).toString());
+                    Optional<Object> token = Optional.ofNullable(cache.get(header.get()));
                     if (token.isPresent()) {
-                        JsonNode userJson = Json.parse(token.get());
+                        JsonNode userJson = Json.parse(token.get().toString());
                         Long userId = Long.valueOf(userJson.findValue("id").asText());
                         PinUser pu = new PinUser();
                         pu.setUserId(userId);
