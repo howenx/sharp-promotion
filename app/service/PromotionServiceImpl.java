@@ -2,7 +2,6 @@ package service;
 
 import domain.PinActivity;
 import domain.PinSku;
-import domain.PinTieredPrice;
 import domain.PinUser;
 import mapper.PinSkuMapper;
 
@@ -10,7 +9,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- *
+ * PromotionServiceImpl
  * Created by howen on 16/1/25.
  */
 public class PromotionServiceImpl implements PromotionService {
@@ -24,33 +23,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public List<PinTieredPrice> getTieredPriceByPinId(Long pinId) {
-        return pinSkuMapper.getTieredPriceByPinId(pinId);
-    }
-
-    @Override
-    public PinTieredPrice getTieredPriceById(PinTieredPrice pinTieredPrice) {
-        return pinSkuMapper.getTieredPriceById(pinTieredPrice);
-    }
-
-    @Override
-    public Boolean insertPinActivity(PinActivity pinActivity) {
-        return pinSkuMapper.insertPinActivity(pinActivity)>0;
-    }
-
-    @Override
-    public Boolean updatePinActivity(PinActivity pinActivity) {
-        return pinSkuMapper.updatePinActivity(pinActivity)>0;
-    }
-
-    @Override
     public PinActivity selectPinActivityById(Long pinActivityId) {
         return pinSkuMapper.selectPinActivityById(pinActivityId);
-    }
-
-    @Override
-    public Boolean insertPinUser(PinUser pinUser) {
-        return pinSkuMapper.insertPinUser(pinUser)>0;
     }
 
     @Override
@@ -58,10 +32,6 @@ public class PromotionServiceImpl implements PromotionService {
         return pinSkuMapper.selectPinUser(pinUser);
     }
 
-    @Override
-    public List<PinSku> getPinSkus(PinSku pinSku) {
-        return pinSkuMapper.getPinSkus(pinSku);
-    }
 
     @Override
     public List<PinSku> getPinSkuStatus(PinSku pinSku) {

@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static play.libs.Json.newObject;
-import static modules.SysParCom.*;
+import static util.SysParCom.*;
 
 /**
  * 拼购

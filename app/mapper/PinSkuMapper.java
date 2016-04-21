@@ -21,21 +21,9 @@ public interface PinSkuMapper {
      */
     PinSku getPinSkuById(Long pinId);
 
-    List<PinTieredPrice> getTieredPriceByPinId(Long pinId);
-
-    PinTieredPrice getTieredPriceById(PinTieredPrice pinTieredPrice);
-
-    Integer insertPinActivity(PinActivity pinActivity);
-
-    Integer updatePinActivity(PinActivity pinActivity);
-
     PinActivity selectPinActivityById(Long pinActivityId);
 
-    Integer insertPinUser(PinUser pinUser);
-
     List<PinUser> selectPinUser(PinUser pinUser);
-
-    List<PinSku> getPinSkus(PinSku pinSku);
 
     List<PinSku> getPinSkuStatus(PinSku pinSku);
 }

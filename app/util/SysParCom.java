@@ -1,4 +1,4 @@
-package modules;
+package util;
 
 import domain.SysParameter;
 import play.Configuration;
@@ -50,11 +50,13 @@ public class SysParCom {
 
     @Inject
     public SysParCom(SkuService skuService, Configuration configuration) {
+
         POSTAL_STANDARD = skuService.getSysParameter(new SysParameter(null, null, null, "POSTAL_STANDARD")).getParameterVal();
 
         POSTAL_LIMIT = skuService.getSysParameter(new SysParameter(null, null, null, "POSTAL_LIMIT")).getParameterVal();
 
         FREE_SHIP = skuService.getSysParameter(new SysParameter(null, null, null, "FREE_SHIP")).getParameterVal();
+
         SHOPPING_URL = configuration.getString("shopping.server.url");
 
         PROMOTION_URL = configuration.getString("promotion.server.url");

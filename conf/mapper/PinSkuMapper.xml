@@ -3,6 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.PinSkuMapper">
+
+    <cache type="util.cache.MemcachedCache"/>
+
     <sql id="pinSkuColumns">
         ${alias}.pin_id,
         ${alias}.pin_img,
@@ -31,17 +34,6 @@
         from pin_sku t where pin_id = ${value}
     </select>
 
-    <select id="getPinSkus" resultType="domain.PinSku" parameterType="domain.PinSku">
-        select
-        <include refid="pinSkuColumns">
-            <property name="alias" value="t"/>
-        </include>
-        from pin_sku t where 1=1
-        <if test="pinId!=null and pinId!=''">
-            and  pin_id = ${pinId}
-        </if>
-    </select>
-
     <select id="getPinSkuStatus" resultType="domain.PinSku" parameterType="domain.PinSku">
         select
         <include refid="pinSkuColumns">
@@ -54,85 +46,7 @@
         and status = 'Y'
     </select>
 
-    <sql id="tieredPriceColumns">
-        ${alias}.id,
-        ${alias}.master_coupon_class,
-        ${alias}.master_coupon_start_at,
-        ${alias}.master_coupon_end_at,
-        ${alias}.master_coupon_quota,
-        ${alias}.member_coupon,
-        ${alias}.member_coupon_class,
-        ${alias}.member_coupon_start_at,
-        ${alias}.member_coupon_end_at,
-        ${alias}.member_coupon_quota,
-        ${alias}.pin_id,
-        ${alias}.people_num,
-        ${alias}.price,
-        ${alias}.master_min_price,
-        ${alias}.member_min_price,
-        ${alias}.master_coupon
-    </sql>
-
-    <select id="getTieredPriceByPinId" parameterType="java.lang.Long" resultType="domain.PinTieredPrice">
-        select
-        <include refid="tieredPriceColumns">
-            <property name="alias" value="t"/>
-        </include>
-        from pin_tiered_price t where t.pin_id = ${value} order by t.people_num
-    </select>
-
-    <select id="getTieredPriceById" parameterType="domain.PinTieredPrice" resultType="domain.PinTieredPrice">
-        select
-        <include refid="tieredPriceColumns">
-            <property name="alias" value="t"/>
-        </include>
-        from pin_tiered_price t where t.id = #{id}
-        <if test="pinId!=null and pinId!=''">
-            and t.pin_id = #{pinId}
-        </if>
-        order by t.people_num
-    </select>
-
-    <insert id="insertPinActivity" parameterType="domain.PinActivity" useGeneratedKeys="true" keyProperty="pinActiveId">
-        insert into pin_activity (
-        pin_id           ,
-        master_user_id   ,
-        person_num       ,
-        pin_price        ,
-        join_persons     ,
-        create_at        ,
-        status           ,
-        end_at,
-        pin_tiered_id
-        ) values (
-            #{pinId},
-            #{masterUserId},
-            #{personNum},
-            #{pinPrice},
-            #{joinPersons},
-            CURRENT_TIMESTAMP(0),
-            #{status},
-            #{endAt},
-            #{pinTieredId}
-        )
-    </insert>
-
-    <update id="updatePinActivity" parameterType="domain.PinActivity">
-        update pin_activity set
-        update_at= CURRENT_TIMESTAMP(0)
-        <if test="status!=null and status!=''">
-            ,status = #{status}
-        </if>
-        <if test="joinPersons!=null and joinPersons!=''">
-            ,join_persons = #{joinPersons}
-        </if>
-        <if test="pinUrl!=null and pinUrl!=''">
-            ,pin_url = #{pinUrl}
-        </if>
-        where pin_active_id = #{pinActiveId}
-    </update>
-
-    <select id="selectPinActivityById" parameterType="java.lang.Long" resultType="domain.PinActivity">
+    <select id="selectPinActivityById" parameterType="java.lang.Long" resultType="domain.PinActivity" useCache="false">
         select
         pin_active_id    ,
         pin_id           ,
@@ -148,27 +62,8 @@
         from pin_activity where pin_active_id = ${value} order by create_at DESC
     </select>
 
-    <insert id="insertPinUser" parameterType="domain.PinUser" useGeneratedKeys="true" keyProperty="id">
-        insert into pin_user (
-        user_id         ,
-        or_master       ,
-        pin_active_id   ,
-        user_ip         ,
-        or_robot        ,
-        user_img,
-        join_at
-        ) values (
-            #{userId},
-            #{orMaster},
-            #{pinActiveId},
-            #{userIp}::cidr,
-            #{orRobot},
-            #{userImg},
-            CURRENT_TIMESTAMP(0)
-        )
-    </insert>
 
-    <select id="selectPinUser" parameterType="domain.PinUser" resultType="domain.PinUser">
+    <select id="selectPinUser" parameterType="domain.PinUser" resultType="domain.PinUser" useCache="false">
         select
         id              ,
         user_id         ,

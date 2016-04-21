@@ -12,10 +12,6 @@ public interface SkuMapper {
 
     Sku getInv(Sku sku) throws Exception;
 
-    Integer updateInv(Sku sku) throws Exception;
-
-    Carriage getCarriage(Carriage carriage) throws Exception;
-
     SysParameter getSysParameter(SysParameter sysParameter) throws Exception;
 
 }

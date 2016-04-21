@@ -4,8 +4,6 @@ import com.google.inject.PrivateModule;
 import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 import mapper.SkuMapper;
-import mapper.SubjectPriceMapper;
-import mapper.VaryPriceMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.session.SqlSessionManagerProvider;
@@ -37,8 +35,6 @@ public class StyleDBModule extends PrivateModule{
                 bindDataSourceProviderType(DevDataSourceProvider.class);
                 bindTransactionFactoryType(JdbcTransactionFactory.class);
                 addMapperClass(SkuMapper.class);
-                addMapperClass(VaryPriceMapper.class);
-                addMapperClass(SubjectPriceMapper.class);
             }
         });
 

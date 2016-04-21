@@ -2,7 +2,6 @@ package service;
 
 import domain.PinActivity;
 import domain.PinSku;
-import domain.PinTieredPrice;
 import domain.PinUser;
 
 import java.util.List;
@@ -15,22 +14,12 @@ public interface PromotionService {
 
     PinSku getPinSkuById(Long pinId);
 
-    List<PinTieredPrice> getTieredPriceByPinId(Long pinId);
-
-    PinTieredPrice getTieredPriceById(PinTieredPrice pinTieredPrice);
-
-
-    Boolean insertPinActivity(PinActivity pinActivity);
-
-    Boolean updatePinActivity(PinActivity pinActivity);
 
     PinActivity selectPinActivityById(Long pinActivityId);
 
-    Boolean insertPinUser(PinUser pinUser);
 
     List<PinUser> selectPinUser(PinUser pinUser);
 
-    List<PinSku> getPinSkus(PinSku pinSku);
 
     List<PinSku> getPinSkuStatus(PinSku pinSku);
 }

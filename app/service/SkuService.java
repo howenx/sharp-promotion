@@ -1,8 +1,7 @@
 package service;
 
-import domain.*;
-
-import java.util.List;
+import domain.Sku;
+import domain.SysParameter;
 
 /**
  * sku service
@@ -12,14 +11,6 @@ public interface SkuService {
 
     Sku getInv(Sku sku) throws Exception;
 
-    Boolean updateInv(Sku sku) throws Exception;
-
-    Carriage getCarriage(Carriage carriage) throws Exception;
-
     SysParameter getSysParameter(SysParameter sysParameter);
-
-    List<VaryPrice> getVaryPriceBy(VaryPrice varyPrice);
-
-    SubjectPrice getSbjPriceById(Long id);
 
 }
