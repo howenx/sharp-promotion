@@ -2,10 +2,12 @@ package service;
 
 import domain.Sku;
 import domain.SysParameter;
+import domain.VersionVo;
 import mapper.SkuMapper;
 import play.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * impl
@@ -28,5 +30,10 @@ public class SkuServiceImpl implements SkuService {
             Logger.error(ex.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public List<VersionVo> getVersioning(VersionVo versionVo) {
+        return skuMapper.getVersioning(versionVo);
     }
 }

@@ -2,6 +2,9 @@ package service;
 
 import domain.Sku;
 import domain.SysParameter;
+import domain.VersionVo;
+
+import java.util.List;
 
 /**
  * sku service
@@ -12,5 +15,7 @@ public interface SkuService {
     Sku getInv(Sku sku) throws Exception;
 
     SysParameter getSysParameter(SysParameter sysParameter);
+
+    List<VersionVo> getVersioning(VersionVo versionVo);
 
 }
