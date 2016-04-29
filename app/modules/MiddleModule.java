@@ -3,6 +3,9 @@ package modules;
 import com.google.inject.AbstractModule;
 import play.Configuration;
 import play.Environment;
+import redis.clients.jedis.Jedis;
+import util.LogUtil;
+import util.RedisPool;
 import util.SysParCom;
 import util.cache.MemcachedConfiguration;
 
@@ -25,5 +28,8 @@ public class MiddleModule extends AbstractModule {
     protected void configure() {
         bind(MemcachedConfiguration.class).asEagerSingleton();
         bind(SysParCom.class).asEagerSingleton();
+        bind(LogUtil.class).asEagerSingleton();
+        bind(RedisPool.class).asEagerSingleton();
+        bind(Jedis.class).toInstance(RedisPool.create());
     }
 }

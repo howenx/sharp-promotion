@@ -47,6 +47,11 @@ public class SysParCom {
 
     public static String ACTOR_PIN_FAIL;
 
+    public static String REDIS_URL;
+    public static String REDIS_PASSWORD;
+    public static Integer REDIS_PORT;
+    public static String REDIS_CHANNEL;
+
 
     @Inject
     public SysParCom(SkuService skuService, Configuration configuration) {
@@ -76,6 +81,11 @@ public class SysParCom {
         IMAGE_URL = configuration.getString("image.server.url");
 
         ACTOR_PIN_FAIL =  configuration.getString("actor.pin.fail");
+
+        REDIS_URL = configuration.getString("redis.host");
+        REDIS_PASSWORD = configuration.getString("redis.password");
+        REDIS_PORT = configuration.getInt("redis.port");
+        REDIS_CHANNEL = configuration.getString("redis.channel");
 
     }
 

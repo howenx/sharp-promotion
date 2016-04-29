@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   filters
 )
 
-
+libraryDependencies += "redis.clients" % "jedis" % "2.8.1"
 libraryDependencies += "commons-io" % "commons-io" % "2.4"
 libraryDependencies += "com.squareup.okhttp" % "okhttp" % "2.7.2"
 libraryDependencies += "commons-beanutils" % "commons-beanutils" % "1.9.2"
@@ -43,7 +43,6 @@ libraryDependencies += "com.typesafe.akka" % "akka-kernel_2.11" % "2.4.1" withSo
 libraryDependencies += "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.1" withSources() withJavadoc()
 
 libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.4.1" withSources() withJavadoc()
-
 
 
 resolvers ++= Seq(
