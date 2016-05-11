@@ -1,6 +1,5 @@
 package service;
 
-import domain.Collect;
 import domain.Order;
 import domain.OrderLine;
 import mapper.ShoppingCartMapper;
@@ -25,5 +24,10 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Order> getPinUserOrder(Order order) throws Exception {
         return shoppingCartMapper.getPinUserOrder(order);
+    }
+
+    @Override
+    public List<Order> getOrder(Order order) throws Exception {
+        return shoppingCartMapper.getOrder(order);
     }
 }

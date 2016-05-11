@@ -126,7 +126,6 @@ public class PinCtrl extends Controller {
                 }
                 pinActivityDTO.setPinImg(js_invImg.toString());
 
-
                 //用户状态
                 if (header.isPresent()) {
                     Optional<Object> token = Optional.ofNullable(cache.get(header.get()));
@@ -243,7 +242,7 @@ public class PinCtrl extends Controller {
                     Order order = new Order();
                     order.setUserId(userId);
                     order.setPinActiveId(pin.getPinActiveId());
-                    List<Order> orders = cartService.getPinUserOrder(order);
+                    List<Order> orders = cartService.getOrder(order);
                     if (orders.size() > 0) {
                         order = orders.get(0);
                         pinActivityDTO.setOrderId(order.getOrderId());

@@ -15,4 +15,6 @@ public interface CartService {
 
     List<Order> getPinUserOrder(Order order) throws Exception;
 
+    List<Order> getOrder(Order order) throws Exception;
+
 }
