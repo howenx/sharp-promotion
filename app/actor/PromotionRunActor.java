@@ -2,6 +2,7 @@ package actor;
 
 import akka.actor.AbstractActor;
 import akka.japi.pf.ReceiveBuilder;
+import com.google.common.base.Throwables;
 import domain.VersionVo;
 import play.Configuration;
 import play.Logger;
@@ -38,6 +39,8 @@ public class PromotionRunActor extends AbstractActor {
                     try {
                         inputStream = response.getBodyAsStream();
                         String zipPath = configuration.getString("promotion.zip.path");
+
+                        rmShell(zipPath,projectName);
 
                         final File file = new File(zipPath);
 
@@ -100,6 +103,20 @@ public class PromotionRunActor extends AbstractActor {
         }
         Logger.error("压缩---->\n" + output);
         Logger.error("执行脚本---->\n" + output2);
+    }
+
+    private void rmShell(String dist, String projectName){
+        List<String> commands = Arrays.asList("bash", "-c", "rm -rf " + projectName +"*");
+
+        String output = null;
+        try {
+            output = exec(dist, null, commands);
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            Logger.error(Throwables.getStackTraceAsString(e));
+        }
+        Logger.error("删除---->\n" + output);
     }
 
     private String exec(String dist, String command, List<String> commands) throws IOException, InterruptedException {
