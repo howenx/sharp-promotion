@@ -94,7 +94,7 @@ public class PinCtrl extends Controller {
                     try {
                         ID userNm = idService.getID(p.getUserId());
                         if (userNm == null)
-                            p.setUserNm(("HMM-RB" + GenCouponCode.GetCode(4)).toLowerCase());
+                            p.setUserNm(("KG-RB" + GenCouponCode.GetCode(4)).toLowerCase());
                         else p.setUserNm(idService.getID(p.getUserId()).getNickname());
                     } catch (Exception e) {
                         e.printStackTrace();
